@@ -1,4 +1,4 @@
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
 from rest_framework.test import force_authenticate
@@ -24,17 +24,20 @@ class AuthApiTest(APITestCase):
 class ForumPostApiTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(email="forum@ex.com", password="pass", role="Learner")
-        self.client.force_authenticate(user=self.user)
+        self.url_forum_list = reverse('forumpost-list')
+        self.url_job_list = reverse('joblisting-list')
+        self.url_analytics = reverse('analytics-summary')
 
     def test_create_forum_post(self):
-        url = reverse('forumpost-list')
+        self.client.force_authenticate(user=self.user)
         data = {"title": "New Post", "content": "New Content"}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(self.url_forum_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["title"], "New Post")
         self.assertEqual(response.data["author"], self.user.id)
 
     def test_get_forum_post(self):
+        self.client.force_authenticate(user=self.user)
         post = ForumPost.objects.create(title="Existing Post", content="Content", author=self.user)
         url = reverse('forumpost-detail', kwargs={'pk': post.id})
         response = self.client.get(url)
@@ -42,13 +45,14 @@ class ForumPostApiTest(APITestCase):
         self.assertEqual(response.data["title"], "Existing Post")
 
     def test_create_job_listing(self):
-        url = reverse('joblisting-list')
+        self.client.force_authenticate(user=self.user)
         data = {"title": "New Job", "description": "Part-time", "company": "NewCo"}
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(self.url_job_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["title"], "New Job")
 
     def test_get_job_listing(self):
+        self.client.force_authenticate(user=self.user)
         job = JobListing.objects.create(title="Old Job", description="Full-time", company="OldCo")
         url = reverse('joblisting-detail', kwargs={'pk': job.id})
         response = self.client.get(url)
@@ -56,8 +60,13 @@ class ForumPostApiTest(APITestCase):
         self.assertEqual(response.data["title"], "Old Job")
 
     def test_analytics_summary(self):
-        url = reverse('analytics-summary')
-        response = self.client.get(url)
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url_analytics)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("daily_active_users", response.data)
-        # Add more assertions after populating data
+
+    def test_unauthorized_forum_post_create(self):
+        client = APIClient()  # Fresh unauthenticated client
+        data = {"title": "Unauthorized Post", "content": "Content"}
+        response = client.post(self.url_forum_list, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -4,7 +4,7 @@ from .views import RegisterView, LoginView, ProfileView, RefreshTokenView, Forum
 urlpatterns = [
     path('auth/register/', RegisterView.as_view(), name='register'),
     path('token/', LoginView.as_view(), name='token_obtain_pair'),
-    path('auth/profile/', ProfileView.as_view(), name='profile'),
+    path('profile/', ProfileView.as_view(), name='profile'),
     path('auth/refresh/', RefreshTokenView.as_view(), name='token_refresh'),
     path('api/forum-posts/', ForumPostListCreate.as_view(), name='forumpost-list'),
     path('api/forum-posts/<int:pk>/', ForumPostRetrieveUpdateDestroy.as_view(), name='forumpost-detail'),

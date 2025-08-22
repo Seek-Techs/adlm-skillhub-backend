@@ -32,6 +32,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(null=True, blank=True)  # Soft delete
 
+    login_count = models.PositiveIntegerField(default=0)
+    last_login_time = models.DateTimeField(null=True, blank=True)
+    resources_viewed = models.PositiveIntegerField(default=0)
+
     # Profile fields
     skills = models.JSONField(default=list)
     progress = models.FloatField(default=0.0)
@@ -50,6 +54,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         except:
             return False
         
+    def update_login_stats(self):
+        self.login_count += 1
+        self.last_login_time = timezone.now()
+        self.save()
+        
 class LearningResource(models.Model):
     title = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=[('Course', 'Course'), ('Tutorial', 'Tutorial')])
@@ -57,6 +66,9 @@ class LearningResource(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 # Phase 2 Models
 class ForumPost(models.Model):

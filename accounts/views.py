@@ -2,16 +2,16 @@ import os
 
 from django.contrib.sessions.models import Session
 from rest_framework import status, generics, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import UntypedToken
 from django.utils import timezone
 from django.db.models import Count
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 from .models import AnalyticsEvent, ForumPost, JobListing, User
 from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer
+from rest_framework.pagination import PageNumberPagination
 
 
 class RegisterView(APIView):
@@ -39,6 +39,8 @@ class VerifyEmailView(APIView):
             return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
@@ -60,10 +62,16 @@ class RefreshTokenView(APIView):
             return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
 
 # Phase 2: Analytics and Forum
+
 class ForumPostListCreate(generics.ListCreateAPIView):
     queryset = ForumPost.objects.all()
     serializer_class = ForumPostSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = PageNumberPagination
+
+    def initial(self, request, *args, **kwargs):
+        # print(f"Permission check for user: {request.user}, authenticated: {request.user.is_authenticated}")
+        super().initial(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -89,11 +97,14 @@ class AnalyticsSummary(generics.GenericAPIView):
     def get(self, request):
         today = timezone.now().date()
         daily_logins = User.objects.filter(last_login__date=today).count()
-        total_resources_viewed = sum(user.resources_viewed for user in User.objects.all())
+        total_resources_viewed = sum(getattr(user, 'resources_viewed', 0) for user in User.objects.all())
+
+        event_types = AnalyticsEvent.objects.values('event_type').annotate(count=Count('id'))
         data = {
             'daily_active_users': daily_logins,
             'total_resources_viewed': total_resources_viewed,
             'event_count': AnalyticsEvent.objects.count(),
+            'event_types': list(event_types),
         }
         return Response(data)
     
