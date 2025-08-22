@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils import timezone
 from argon2 import PasswordHasher
 
+
 ph = PasswordHasher()
 
 class UserManager(BaseUserManager):
@@ -20,7 +21,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
-
+    
+# Custom User Model
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=[('Learner', 'Learner'), ('Mentor', 'Mentor'), ('Admin', 'Admin')], default='Learner')
@@ -55,3 +57,33 @@ class LearningResource(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+
+# Phase 2 Models
+class ForumPost(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+    
+class JobListing(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    company = models.CharField(max_length=100)
+    posted_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.title} at {self.company}"
+    
+class AnalyticsEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    event_type = models.CharField(max_length=50)  # e.g., 'login', 'resource_view'
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.JSONField(default=dict)
+
+    def __str__(self):
+        return f"{self.event_type} at {self.timestamp}"

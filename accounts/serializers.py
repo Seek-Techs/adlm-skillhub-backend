@@ -1,6 +1,6 @@
 from django.db import IntegrityError
 from rest_framework import serializers
-from .models import User
+from .models import AnalyticsEvent, ForumPost, JobListing, LearningResource, User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import os
 
@@ -51,3 +51,24 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.is_verified:
             raise serializers.ValidationError('Email not verified')
         return data
+    
+class ForumPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForumPost
+        fields = ['id', 'title', 'content', 'author', 'created_at', 'updated_at']
+        read_only_fields = ['author', 'created_at', 'updated_at']
+
+class JobListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobListing
+        fields = ['id', 'title', 'description', 'company', 'posted_at', 'is_active']
+
+class AnalyticsEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnalyticsEvent
+        fields = ['id', 'user', 'event_type', 'timestamp', 'details']
+
+class LearningResourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LearningResource
+        fields = ['id', 'title', 'type', 'content', 'created_at', 'updated_at']

@@ -1,14 +1,17 @@
 import os
 
 from django.contrib.sessions.models import Session
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import UntypedToken
+from django.utils import timezone
+from django.db.models import Count
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import User
-from .serializers import RegisterSerializer, UserSerializer
+from .models import AnalyticsEvent, ForumPost, JobListing, User
+from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer
 
 
 class RegisterView(APIView):
@@ -55,3 +58,48 @@ class RefreshTokenView(APIView):
             return Response({'access_token': str(access_token)})
         except:
             return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+# Phase 2: Analytics and Forum
+class ForumPostListCreate(generics.ListCreateAPIView):
+    queryset = ForumPost.objects.all()
+    serializer_class = ForumPostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+class ForumPostRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ForumPost.objects.all()
+    serializer_class = ForumPostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class JobListingListCreate(generics.ListCreateAPIView):
+    queryset = JobListing.objects.all()
+    serializer_class = JobListingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class JobListingRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = JobListing.objects.all()
+    serializer_class = JobListingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class AnalyticsSummary(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        today = timezone.now().date()
+        daily_logins = User.objects.filter(last_login__date=today).count()
+        total_resources_viewed = sum(user.resources_viewed for user in User.objects.all())
+        data = {
+            'daily_active_users': daily_logins,
+            'total_resources_viewed': total_resources_viewed,
+            'event_count': AnalyticsEvent.objects.count(),
+        }
+        return Response(data)
+    
+class LoginView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        user = request.user
+        user.update_login_stats()
+        return response

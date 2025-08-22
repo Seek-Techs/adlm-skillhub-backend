@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, LearningResource
+from .models import AnalyticsEvent, ForumPost, JobListing, User, LearningResource
 
 # Define the admin class for the custom User model
 class CustomUserAdmin(UserAdmin):
@@ -25,3 +25,6 @@ class CustomUserAdmin(UserAdmin):
 # Register the models
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(LearningResource)
+admin.site.register(ForumPost)
+admin.site.register(JobListing)
+admin.site.register(AnalyticsEvent)

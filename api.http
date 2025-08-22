@@ -1,0 +1,26 @@
+GET http://127.0.0.1:8000/admin
+
+###
+POST http://localhost:8000/token/
+Content-Type: application/json
+
+{
+    "email": "admin_y@example.com",
+    "password": "testpass",
+    "role": "Learner"
+}
+
+
+###
+GET http://localhost:8000/auth/profile/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1ODU0ODc3LCJpYXQiOjE3NTU4NTM5NzcsImp0aSI6IjQ2ZTU3NWJkNzgzOTQ5NTFiZTY4YTUwZGY4OTg4MjhlIiwidXNlcl9pZCI6IjI1In0.LEGwGHL0xVvrWuOMrQpBObYpWqyxEji61LlU-5TmDYQ
+
+###
+POST  http://localhost:8000/token/refresh/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1NjQ2MDQ2MCwiaWF0IjoxNzU1ODU1NjYwLCJqdGkiOiI2NmYyNWYyMjg0YjE0Mjc0YWMxMDBhYzQxZWI3NjA0MiIsInVzZXJfaWQiOiIyNSJ9.CYepjLsPW_Iknes7zQSFQOd0AFUH46SaEF18BZOdm80"
+}
+
+
