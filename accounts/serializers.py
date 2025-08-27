@@ -72,3 +72,9 @@ class LearningResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = LearningResource
         fields = ['id', 'title', 'type', 'content', 'created_at', 'updated_at']
+
+class AnalyticsSummarySerializer(serializers.Serializer):
+    daily_active_users = serializers.IntegerField()
+    total_resources_viewed = serializers.IntegerField()
+    event_count = serializers.IntegerField()
+    event_types = serializers.ListField(child=serializers.DictField())

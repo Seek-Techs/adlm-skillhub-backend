@@ -9,9 +9,10 @@ from rest_framework_simplejwt.tokens import UntypedToken
 from django.utils import timezone
 from django.db.models import Count
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import AnalyticsEvent, ForumPost, JobListing, User
-from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer
+from .models import ForumPost, JobListing, User
+from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer, AnalyticsSummarySerializer
 from rest_framework.pagination import PageNumberPagination
+from ai.models import AnalyticsEvent
 
 
 class RegisterView(APIView):
@@ -85,6 +86,7 @@ class JobListingListCreate(generics.ListCreateAPIView):
     queryset = JobListing.objects.all()
     serializer_class = JobListingSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = PageNumberPagination
 
 class JobListingRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = JobListing.objects.all()
@@ -93,6 +95,7 @@ class JobListingRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 class AnalyticsSummary(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AnalyticsSummarySerializer
 
     def get(self, request):
         today = timezone.now().date()
@@ -106,7 +109,9 @@ class AnalyticsSummary(generics.GenericAPIView):
             'event_count': AnalyticsEvent.objects.count(),
             'event_types': list(event_types),
         }
-        return Response(data)
+        serializer = AnalyticsSummarySerializer(data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
     
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):

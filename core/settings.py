@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'social_django',
     'accounts',
     'drf_yasg',
+    'ai',
 ]
 
 MIDDLEWARE = [
@@ -110,4 +111,15 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 ROOT_URLCONF = 'core.urls'
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+TEST_DISCOVER_TOP_LEVEL = True
+
+# Test settings
+# TESTS_DIR = [
+#     os.path.join(BASE_DIR, 'accounts/tests'),
+#     os.path.join(BASE_DIR, 'ai/tests'),
+# ]
 

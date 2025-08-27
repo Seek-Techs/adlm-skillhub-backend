@@ -13,7 +13,7 @@ import faiss
 from rest_framework import permissions
 from sklearn.linear_model import LinearRegression
 import numpy as np
-
+from django.utils import timezone
 
 class AICareerCoach(APIView):
     permission_classes = [IsAuthenticated]

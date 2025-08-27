@@ -1,0 +1,510 @@
+swagger: '2.0'
+info:
+  title: ADLM SkillHub API
+  description: API for ADLM SkillHub backend
+  version: v1
+host: 127.0.0.1:8000
+schemes:
+- http
+basePath: /
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+- Basic: []
+paths:
+  /ai/career-coach/:
+    post:
+      operationId: ai_career-coach_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - ai
+    parameters: []
+  /ai/predictive/:
+    get:
+      operationId: ai_predictive_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - ai
+    parameters: []
+  /ai/recommendations/:
+    get:
+      operationId: ai_recommendations_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - ai
+    parameters: []
+  /ai/search/:
+    get:
+      operationId: ai_search_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - ai
+    parameters: []
+  /auth/api/analytics/summary/:
+    get:
+      operationId: auth_api_analytics_summary_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AnalyticsSummary'
+      tags:
+      - auth
+    parameters: []
+  /auth/api/forum-posts/:
+    get:
+      operationId: auth_api_forum-posts_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/ForumPost'
+      tags:
+      - auth
+    post:
+      operationId: auth_api_forum-posts_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ForumPost'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/ForumPost'
+      tags:
+      - auth
+    parameters: []
+  /auth/api/forum-posts/{id}/:
+    get:
+      operationId: auth_api_forum-posts_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ForumPost'
+      tags:
+      - auth
+    put:
+      operationId: auth_api_forum-posts_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ForumPost'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ForumPost'
+      tags:
+      - auth
+    patch:
+      operationId: auth_api_forum-posts_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ForumPost'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/ForumPost'
+      tags:
+      - auth
+    delete:
+      operationId: auth_api_forum-posts_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - auth
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this forum post.
+      required: true
+      type: integer
+  /auth/api/job-listings/:
+    get:
+      operationId: auth_api_job-listings_list
+      description: ''
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/JobListing'
+      tags:
+      - auth
+    post:
+      operationId: auth_api_job-listings_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/JobListing'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/JobListing'
+      tags:
+      - auth
+    parameters: []
+  /auth/api/job-listings/{id}/:
+    get:
+      operationId: auth_api_job-listings_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/JobListing'
+      tags:
+      - auth
+    put:
+      operationId: auth_api_job-listings_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/JobListing'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/JobListing'
+      tags:
+      - auth
+    patch:
+      operationId: auth_api_job-listings_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/JobListing'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/JobListing'
+      tags:
+      - auth
+    delete:
+      operationId: auth_api_job-listings_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - auth
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this job listing.
+      required: true
+      type: integer
+  /auth/auth/refresh/:
+    post:
+      operationId: auth_auth_refresh_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - auth
+    parameters: []
+  /auth/auth/register/:
+    post:
+      operationId: auth_auth_register_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+      - auth
+    parameters: []
+  /auth/profile/:
+    get:
+      operationId: auth_profile_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+      - auth
+    parameters: []
+  /auth/token/:
+    post:
+      operationId: auth_token_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenObtainPair'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TokenObtainPair'
+      tags:
+      - auth
+    parameters: []
+  /token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenObtainPair'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TokenObtainPair'
+      tags:
+      - token
+    parameters: []
+  /token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenRefresh'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/TokenRefresh'
+      tags:
+      - token
+    parameters: []
+definitions:
+  AnalyticsSummary:
+    required:
+    - daily_active_users
+    - total_resources_viewed
+    - event_count
+    - event_types
+    type: object
+    properties:
+      daily_active_users:
+        title: Daily active users
+        type: integer
+      total_resources_viewed:
+        title: Total resources viewed
+        type: integer
+      event_count:
+        title: Event count
+        type: integer
+      event_types:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: string
+            x-nullable: true
+  ForumPost:
+    required:
+    - title
+    - content
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 200
+        minLength: 1
+      content:
+        title: Content
+        type: string
+        minLength: 1
+      author:
+        title: Author
+        type: integer
+        readOnly: true
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+      updated_at:
+        title: Updated at
+        type: string
+        format: date-time
+        readOnly: true
+  JobListing:
+    required:
+    - title
+    - description
+    - company
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 200
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        minLength: 1
+      company:
+        title: Company
+        type: string
+        maxLength: 100
+        minLength: 1
+      posted_at:
+        title: Posted at
+        type: string
+        format: date-time
+        readOnly: true
+      is_active:
+        title: Is active
+        type: boolean
+  TokenObtainPair:
+    required:
+    - email
+    - password
+    type: object
+    properties:
+      email:
+        title: Email
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+  TokenRefresh:
+    required:
+    - refresh
+    type: object
+    properties:
+      refresh:
+        title: Refresh
+        type: string
+        minLength: 1
+      access:
+        title: Access
+        type: string
+        readOnly: true
+        minLength: 1
