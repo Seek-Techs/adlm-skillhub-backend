@@ -138,7 +138,7 @@ To develop a scalable, intelligent backend platform that empowers users with per
 - Enhance documentation with static API specs and model details.
 
 ## License
-[MIT License] (Add a LICENSE file if desired.)
+
 
 ## Contact
-For questions or support, contact [your-email@example.com].
+For questions or support, contact [sikiru.yusuff@yahoo.com].
