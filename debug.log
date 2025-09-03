@@ -1,0 +1,472 @@
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Internal Server Error: /auth/register/
+Method Not Allowed: /auth/token/
+Not Found: /favicon.ico
+Bad Request: /auth/token/
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+Bad Request: /auth/token/
+Bad Request: /auth/token/
+Method Not Allowed: /auth/register/
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+Method Not Allowed: /auth/token/
+Bad Request: /auth/token/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+User registered: 1yusuff2.learner@example.com
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Internal Server Error: /auth/register/
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Internal Server Error: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Request data: {'email': '1yusuff223.learner@example.com', 'password': 'SecurePass123!', 'role': 'Learner', 'skills': ['Python', 'Django', 'Machine Learning', 'Data Analysis']}
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 38, in create
+    send_mail(
+    ~~~~~~~~~^
+        'Verify Your Account',
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+            fail_silently=False,
+            ^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 31, in post
+    user = serializer.save()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 52, in create
+    raise serializers.ValidationError(f"An error occurred: {e}")
+rest_framework.exceptions.ValidationError: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+
+Internal Server Error: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Request data: {'email': 'yusuff223.learner@example.com', 'password': 'SecurePass123!', 'role': 'Learner', 'skills': ['Python', 'Django', 'Machine Learning', 'Data Analysis']}
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 40, in create
+    send_mail(
+    ~~~~~~~~~^
+        'Verify Your Account',
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+            fail_silently=False,
+            ^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 31, in post
+    user = serializer.save()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 54, in create
+    raise serializers.ValidationError(f"An error occurred: {e}")
+rest_framework.exceptions.ValidationError: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+
+Internal Server Error: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Request data: {'email': 'yousuff223.learner@example.com', 'password': 'SecurePass123!', 'role': 'Learner', 'skills': ['Python', 'Django', 'Machine Learning', 'Data Analysis']}
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 41, in create
+    send_mail(
+    ~~~~~~~~~^
+        'Verify Your Account',
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+            fail_silently=False,
+            ^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 31, in post
+    user = serializer.save()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 55, in create
+    raise serializers.ValidationError(f"An error occurred: {e}")
+rest_framework.exceptions.ValidationError: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+
+Internal Server Error: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+Registration error: [ErrorDetail(string="An error occurred: Field 'progress' expected a number but got {}.", code='invalid')]
+Request data: {'email': 'alice2.learner@example.com', 'password': 'SecurePass123!', 'role': 'Learner', 'skills': ['Python', 'Django', 'Machine Learning', 'Data Analysis']}
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 2032, in get_prep_value
+    return float(value)
+TypeError: float() argument must be a string or a real number, not 'dict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 40, in create
+    user.save()
+    ~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 1138, in _save_table
+    updated = self._do_update(
+        base_qs, using, pk_val, values, update_fields, forced_update
+    )
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\query.py", line 1286, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 2060, in execute_sql
+    row_count = super().execute_sql(result_type)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1610, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 2023, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 1012, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 1005, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 2034, in get_prep_value
+    raise e.__class__(
+        "Field '%s' expected a number but got %r." % (self.name, value),
+    ) from e
+TypeError: Field 'progress' expected a number but got {}.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 31, in post
+    user = serializer.save()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 50, in create
+    raise serializers.ValidationError(f"An error occurred: {e}")
+rest_framework.exceptions.ValidationError: [ErrorDetail(string="An error occurred: Field 'progress' expected a number but got {}.", code='invalid')]
+
+Internal Server Error: /auth/register/
+Registration error: [ErrorDetail(string="An error occurred: Field 'progress' expected a number but got {}.", code='invalid')]
+Request data: {'email': '2alice2.learner@example.com', 'password': 'SecurePass123!', 'role': 'Learner', 'skills': ['Python', 'Django', 'Machine Learning', 'Data Analysis']}
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 2032, in get_prep_value
+    return float(value)
+TypeError: float() argument must be a string or a real number, not 'dict'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 40, in create
+    user.save()
+    ~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 1138, in _save_table
+    updated = self._do_update(
+        base_qs, using, pk_val, values, update_fields, forced_update
+    )
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\base.py", line 1203, in _do_update
+    return filtered._update(values) > 0
+           ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\query.py", line 1286, in _update
+    return query.get_compiler(self.db).execute_sql(ROW_COUNT)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 2060, in execute_sql
+    row_count = super().execute_sql(result_type)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1610, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 2023, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 1012, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 1005, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\db\models\fields\__init__.py", line 2034, in get_prep_value
+    raise e.__class__(
+        "Field '%s' expected a number but got %r." % (self.name, value),
+    ) from e
+TypeError: Field 'progress' expected a number but got {}.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 31, in post
+    user = serializer.save()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 50, in create
+    raise serializers.ValidationError(f"An error occurred: {e}")
+rest_framework.exceptions.ValidationError: [ErrorDetail(string="An error occurred: Field 'progress' expected a number but got {}.", code='invalid')]
+
+Internal Server Error: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Registration error: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+Request data: {'email': 'palice2.learner@example.com', 'password': 'SecurePass123!', 'role': 'Learner', 'skills': ['Python', 'Django', 'Machine Learning', 'Data Analysis'], 'progress': 0.0}
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 45, in create
+    self.send_verification_email(user)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 60, in send_verification_email
+    send_mail(
+    ~~~~~~~~~^
+        'Verify Your Account',
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        fail_silently=False,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python313\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+                                    self.source_address)
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Python313\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 31, in post
+    user = serializer.save()
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py", line 53, in create
+    raise serializers.ValidationError(f"An error occurred: {e}")
+rest_framework.exceptions.ValidationError: [ErrorDetail(string='An error occurred: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond', code='invalid')]
+
+Internal Server Error: /auth/register/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+User registered: police2.learner@example.com
+User registered: police.learner@example.com
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.

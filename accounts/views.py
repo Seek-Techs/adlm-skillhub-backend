@@ -13,7 +13,14 @@ from .models import ForumPost, JobListing, User
 from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer, AnalyticsSummarySerializer
 from rest_framework.pagination import PageNumberPagination
 from ai.models import AnalyticsEvent
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+import traceback
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -22,22 +29,39 @@ class RegisterView(APIView):
         if serializer.is_valid():
             try:
                 user = serializer.save()
+                logger.info(f"User registered: {user.email}")
                 return Response({'message': 'User registered, check email'}, status=status.HTTP_201_CREATED)
             except Exception as e:
+                logger.error(f"Registration error: {str(e)}")
+                logger.error(f"Request data: {request.data}\n{traceback.format_exc()}")
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        logger.warning(f"Validation errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class VerifyEmailView(APIView):
-    def get(self, request, token):
+    def get(self, request, uidb64, token):
         try:
-            decoded = UntypedToken(token)
-            user_id = decoded['user_id']
-            user = User.objects.get(id=user_id)
-            user.is_verified = True
-            user.save()
-            return Response({'message': 'Email verified'})
-        except:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+            if default_token_generator.check_token(user, token):
+                user.is_verified = True
+                user.save()
+                return Response({'message': 'Email verified successfully'}, status=status.HTTP_200_OK)
             return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({'message': 'Invalid verification link'}, status=status.HTTP_400_BAD_REQUEST)
+
+# class VerifyEmailView(APIView):
+#     def get(self, request, token):
+#         try:
+#             decoded = UntypedToken(token)
+#             user_id = decoded['user_id']
+#             user = User.objects.get(id=user_id)
+#             user.is_verified = True
+#             user.save()
+#             return Response({'message': 'Email verified'})
+#         except:
+#             return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -115,7 +139,16 @@ class AnalyticsSummary(generics.GenericAPIView):
     
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        user = request.user
-        user.update_login_stats()
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            # Get the user from validated data
+            user_data = serializer.validated_data
+            user_id = user_data.get('user_id')  # Adjust based on your CustomTokenObtainPairSerializer
+            user = User.objects.get(id=user_id) if user_id else None
+            if user:
+                user.update_login_stats()  # Update login stats for the authenticated user
+            response = Response(serializer.validated_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return response

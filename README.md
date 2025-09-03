@@ -22,7 +22,7 @@ To develop a scalable, intelligent backend platform that empowers users with per
 - Python 3.13
 - Django 4.x
 - Django REST Framework
-- PostgreSQL 15 (default) or MongoDB (optional local setup)
+- PostgreSQL 17 (default) or MongoDB (optional local setup)
 - Additional libraries: `transformers`, `sentence-transformers`, `faiss-cpu`, `scikit-learn`, `drf-yasg`, `gunicorn`
 
 ## Installation
