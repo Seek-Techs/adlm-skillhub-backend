@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import UntypedToken
 from django.utils import timezone
 from django.db.models import Count
 from rest_framework_simplejwt.views import TokenObtainPairView
+from sympy import Sum
 from .models import ForumPost, JobListing, User
 from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer, AnalyticsSummarySerializer
 from rest_framework.pagination import PageNumberPagination
@@ -18,6 +19,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 import traceback
 import logging
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 
 logger = logging.getLogger(__name__)
@@ -39,6 +43,8 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class VerifyEmailView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, uidb64, token):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
@@ -117,25 +123,39 @@ class JobListingRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = JobListingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class AnalyticsSummary(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = AnalyticsSummarySerializer
+class AnalyticsSummary(APIView):
+    permission_classes = [IsAuthenticated]
 
+    @method_decorator(cache_page(60 * 5))  # Cache for 5 minutes
     def get(self, request):
-        today = timezone.now().date()
-        daily_logins = User.objects.filter(last_login__date=today).count()
-        total_resources_viewed = sum(getattr(user, 'resources_viewed', 0) for user in User.objects.all())
+        try:
+            # Check cache first
+            cache_key = f"analytics_summary_{request.user.id}"
+            cached_data = cache.get(cache_key)
+            if cached_data is not None:
+                return Response(cached_data)
 
-        event_types = AnalyticsEvent.objects.values('event_type').annotate(count=Count('id'))
-        data = {
-            'daily_active_users': daily_logins,
-            'total_resources_viewed': total_resources_viewed,
-            'event_count': AnalyticsEvent.objects.count(),
-            'event_types': list(event_types),
-        }
-        serializer = AnalyticsSummarySerializer(data)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data)
+            today = timezone.now().date()
+            # Optimize queries with aggregation
+            daily_logins = User.objects.filter(last_login__date=today).count()
+            total_resources_viewed = User.objects.aggregate(total=Sum('resources_viewed'))['total'] or 0
+
+            event_types = AnalyticsEvent.objects.values('event_type').annotate(count=Count('id'))
+            data = {
+                'daily_active_users': daily_logins,
+                'total_resources_viewed': total_resources_viewed,
+                'event_count': AnalyticsEvent.objects.count(),
+                'event_types': list(event_types),
+            }
+            serializer = AnalyticsSummarySerializer(data)
+            response_data = serializer.data
+
+            # Cache the result per user
+            cache.set(cache_key, response_data, timeout=60 * 5)
+            return Response(response_data)
+        except Exception as e:
+            logger.error(f"Analytics summary error: {str(e)}")
+            return Response({"error": "Failed to retrieve analytics"}, status=500)
     
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):

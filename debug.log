@@ -470,3 +470,314 @@ C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\core\settings.py c
 Watching for file changes with StatReloader
 Loading faiss with AVX2 support.
 Successfully loaded faiss with AVX2 support.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+User registered: polise.learner@example.com
+Validation errors: {'email': [ErrorDetail(string='user with this email already exists.', code='unique')]}
+Bad Request: /auth/register/
+Unauthorized: /auth/verify/NDY/cvlj1b-55225ca1c592fe8b66d1aee9e2549b2f/
+Not Found: /favicon.ico
+Unauthorized: /auth/verify/NDY/cvlj1b-55225ca1c592fe8b66d1aee9e2549b2f/
+Not Found: /auth/auth/register/
+Not Found: /auth/auth/register/
+User registered: alice10.learner230@example.com
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Unauthorized: /auth/verify/NDc/cvljja-f28d84e82185fdc7cfef506fe78a8699/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Unauthorized: /auth/verify/<str:uidb64>/<str:token>/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /auth/verify/<str:uidb64>/<str:token>/NDc/cvljja-f28d84e82185fdc7cfef506fe78a8699
+Unauthorized: /auth/verify/<str:uidb64>/<str:token>/
+Unauthorized: /auth/verify/NDc/cvljja-f28d84e82185fdc7cfef506fe78a8699/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Unauthorized: /auth/verify/NDc/cvljja-f28d84e82185fdc7cfef506fe78a8699/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Unauthorized: /auth/verify/NDc/cvljja-f28d84e82185fdc7cfef506fe78a8699/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Bad Request: /auth/token/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Unauthorized: /auth/profile/
+Unauthorized: /auth/profile/
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Unauthorized: /auth/profile/
+Not Found: /auth/verify
+Not Found: /auth/auth/register/
+User registered: bob.mentor@example.com
+Bad Request: /auth/token/
+Internal Server Error: /auth/verify/NDg/cvloyn-63d54183f4806ac8caa09f96f4b178d4
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\utils\deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\middleware\common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/auth/verify/NDg/cvloyn-63d54183f4806ac8caa09f96f4b178d4/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Method Not Allowed: /auth/verify/NDg/cvloyn-63d54183f4806ac8caa09f96f4b178d4/
+User registered: alice1012.learner230@example.com
+Unauthorized: /ai/career-coach/
+Unauthorized: /ai/career-coach/
+Unauthorized: /ai/career-coach/
+Unauthorized: /ai/career-coach/
+Unauthorized: /ai/career-coach/
+Unauthorized: /ai/career-coach/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\ai\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\ai\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Search error: name 'post' is not defined
+Internal Server Error: /ai/search/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\ai\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Generated embeddings for 7 posts
+FAISS index created successfully
+Encoded query: How to learn Python programming for beginners
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Generated embeddings for 7 posts
+FAISS index created successfully
+Encoded query: How to learn Python programming for beginners
+Encoded query: machine learning algorithms and best practices
+Encoded query: React hooks and state management best practices
+Encoded query: Docker containers and Kubernetes deployment strategies
+Unauthorized: /ai/predictive/
+Internal Server Error: /auth/api/analytics/summary/
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py", line 139, in get
+    serializer.is_valid(raise_exception=True)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\serializers.py", line 218, in is_valid
+    assert hasattr(self, 'initial_data'), (
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Cannot call `.is_valid()` as no `data=` keyword argument was passed when instantiating the serializer instance.
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Unauthorized: /auth/api/analytics/summary/
+Analytics summary error: name 'cache' is not defined
+Internal Server Error: /auth/api/analytics/summary/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Analytics summary error: name 'cache' is not defined
+Internal Server Error: /auth/api/analytics/summary/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\accounts\views.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Analytics summary error: Sum requires values for lower and upper bounds.
+Internal Server Error: /auth/api/analytics/summary/
+C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Watching for file changes with StatReloader
+Loading faiss with AVX2 support.
+Successfully loaded faiss with AVX2 support.
+Use pytorch device_name: cpu
+Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+Internal Server Error: /auth/api/analytics/summary/
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django_redis\cache.py", line 29, in _decorator
+    return method(self, *args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django_redis\cache.py", line 99, in _get
+    return self.client.get(key, default=default, version=version, client=client)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django_redis\client\default.py", line 300, in get
+    raise ConnectionInterrupted(connection=client) from e
+django_redis.exceptions.ConnectionInterrupted: Redis ConnectionError: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\utils\decorators.py", line 185, in _view_wrapper
+    result = _pre_process_request(request, *args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\utils\decorators.py", line 131, in _pre_process_request
+    result = middleware.process_request(request)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\middleware\cache.py", line 161, in process_request
+    cache_key = get_cache_key(request, self.key_prefix, "GET", cache=self.cache)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django\utils\cache.py", line 392, in get_cache_key
+    headerlist = cache.get(cache_key)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django_redis\cache.py", line 92, in get
+    value = self._get(key, default, version, client)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django_redis\cache.py", line 36, in _decorator
+    raise e.__cause__  # noqa: B904
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\django_redis\client\default.py", line 298, in get
+    value = client.get(key)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\commands\core.py", line 1829, in get
+    return self.execute_command("GET", name, keys=[name])
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\client.py", line 621, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\client.py", line 627, in _execute_command
+    conn = self.connection or pool.get_connection()
+                              ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\utils.py", line 195, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\connection.py", line 1533, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\connection.py", line 380, in connect
+    self.connect_check_health(check_health=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Python project\adlm-skillhub-backend\venv\Lib\site-packages\redis\connection.py", line 397, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.

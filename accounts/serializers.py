@@ -43,6 +43,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.save()
             # Send verification email
             self.send_verification_email(user)
+            verification_link = f"http://localhost:8000/auth/verify/{uid}/{token}"
+            send_verification_email.delay(user.email, verification_link)  # Async call
 
             return user
         except KeyError as e:
@@ -100,7 +102,7 @@ class LearningResourceSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'type', 'content', 'created_at', 'updated_at']
 
 class AnalyticsSummarySerializer(serializers.Serializer):
-    daily_active_users = serializers.IntegerField()
-    total_resources_viewed = serializers.IntegerField()
-    event_count = serializers.IntegerField()
-    event_types = serializers.ListField(child=serializers.DictField())
+    daily_active_users = serializers.IntegerField(read_only=True)
+    total_resources_viewed = serializers.IntegerField(read_only=True)
+    event_count = serializers.IntegerField(read_only=True)
+    event_types = serializers.ListField(child=serializers.DictField(), read_only=True)

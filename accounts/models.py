@@ -32,9 +32,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(null=True, blank=True)  # Soft delete
 
-    login_count = models.PositiveIntegerField(default=0)
     last_login_time = models.DateTimeField(null=True, blank=True)
-    resources_viewed = models.PositiveIntegerField(default=0)
+    login_count = models.PositiveIntegerField(default=0, db_index=True)
+    resources_viewed = models.PositiveIntegerField(default=0, db_index=True)
 
     # Profile fields
     skills = models.JSONField(default=list)

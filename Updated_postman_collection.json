@@ -1,0 +1,1108 @@
+{
+    "info": {
+        "name": "ADLM SkillHub - AI Career Coach",
+        "description": "Comprehensive Postman collection for testing AI Career Coach features including personalized advice, recommendation engine, natural language search, and predictive analytics.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "123456"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Register User - Learner",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"alice.learner@example.com\",\n    \"password\": \"SecurePass123!\",\n    \"role\": \"Learner\",\n    \"skills\": [\"Python\", \"Django\", \"Machine Learning\", \"Data Analysis\"],\n    \"progress\": 0.0\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "register", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Register User - Mentor",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"bob.mentor@example.com\",\n    \"password\": \"MentorPass123!\",\n    \"role\": \"Mentor\",\n    \"skills\": [\"React\", \"Node.js\", \"DevOps\", \"AWS\", \"Kubernetes\"],\n    \"progress\": 0.0\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "register", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Login User",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.environment.set('access_token', response.access);",
+                                    "    pm.environment.set('refresh_token', response.refresh);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"alice.learner@example.com\",\n    \"password\": \"SecurePass123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/token/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "token", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User Profile",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/profile/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "profile", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "AI Career Coach",
+            "item": [
+                {
+                    "name": "Career Advice - Python Development",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"query\": \"I'm a beginner in Python and want to become a machine learning engineer. What skills should I focus on and what career path should I follow?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ai/career-coach/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "career-coach", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Career Advice - Web Development",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"query\": \"I have 2 years experience in React. How can I transition to full-stack development and what technologies should I learn?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ai/career-coach/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "career-coach", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Career Advice - DevOps Transition",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"query\": \"I'm a software developer looking to transition into DevOps. What are the essential skills and certifications I need to get started?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ai/career-coach/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "career-coach", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Recommendation Engine",
+            "item": [
+                {
+                    "name": "Get Personalized Recommendations",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/recommendations/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "recommendations", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Natural Language Search",
+            "item": [
+                {
+                    "name": "Search - Python Programming",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=How to learn Python programming for beginners",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "How to learn Python programming for beginners"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search - Machine Learning",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=machine learning algorithms and best practices",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "machine learning algorithms and best practices"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search - Web Development",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=React hooks and state management best practices",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "React hooks and state management best practices"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search - DevOps",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=Docker containers and Kubernetes deployment strategies",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "Docker containers and Kubernetes deployment strategies"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Predictive Analytics",
+            "item": [
+                {
+                    "name": "Get User Engagement Forecast",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/predictive/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "predictive", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Forum Management",
+            "item": [
+                {
+                    "name": "Create Forum Post - Python Help",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Best practices for Python error handling and debugging\",\n    \"content\": \"I'm working on a Python project and struggling with proper error handling. What are the best practices for exception handling in Python? Should I use try-except blocks everywhere or are there better patterns? Also, what debugging tools do you recommend for Python development? I've been using print statements but I know there must be better ways to debug complex applications.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Forum Post - Machine Learning",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Getting started with machine learning: choosing the right algorithms\",\n    \"content\": \"I'm new to machine learning and overwhelmed by the number of algorithms available. How do I choose between linear regression, decision trees, random forests, and neural networks? What factors should I consider when selecting an algorithm for a specific problem? Are there any rules of thumb or decision frameworks that can help guide algorithm selection for beginners?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Forum Post - React Development",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"React hooks vs class components: when to use what?\",\n    \"content\": \"I've been learning React and I'm confused about when to use hooks versus class components. I understand that hooks are the modern approach, but are there still use cases where class components are better? What are the performance implications of using hooks? Should I refactor all my existing class components to use hooks, or is it okay to mix both approaches in the same project?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Forum Post - DevOps",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Docker vs Kubernetes: understanding container orchestration\",\n    \"content\": \"I'm transitioning from traditional deployment methods to containerization. I understand Docker for creating containers, but I'm struggling to understand when and why I need Kubernetes. What problems does Kubernetes solve that Docker alone cannot? Is it overkill for small applications? What's the learning curve like, and are there simpler alternatives to Kubernetes for container orchestration?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Forum Posts",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Job Listings",
+            "item": [
+                {
+                    "name": "Create Job Listing - Python Developer",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Senior Python Developer - Machine Learning\",\n    \"description\": \"We are seeking a Senior Python Developer with expertise in machine learning to join our AI team. Requirements: 5+ years Python experience, experience with TensorFlow/PyTorch, strong background in data science, knowledge of MLOps practices. Responsibilities include developing ML models, optimizing algorithms, and deploying models to production. Competitive salary and benefits package.\",\n    \"company\": \"TechAI Solutions\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/job-listings/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "job-listings", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Job Listing - React Developer",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Frontend React Developer\",\n    \"description\": \"Join our frontend team as a React Developer! We're looking for someone with 3+ years of React experience, proficiency in modern JavaScript (ES6+), experience with state management (Redux/Context API), and knowledge of testing frameworks (Jest, React Testing Library). You'll work on building responsive user interfaces and collaborating with design and backend teams.\",\n    \"company\": \"WebFlow Innovations\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/job-listings/",
+                            "host": ["{{// filepath: c:\Users\Admin\Documents\Python project\adlm-skillhub-backend\ADLM_SkillHub_AI_Career_Coach.postman_collection.json
+{
+    "info": {
+        "name": "ADLM SkillHub - AI Career Coach",
+        "description": "Comprehensive Postman collection for testing AI Career Coach features including personalized advice, recommendation engine, natural language search, and predictive analytics.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "123456"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Register User - Learner",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"alice.learner@example.com\",\n    \"password\": \"SecurePass123!\",\n    \"role\": \"Learner\",\n \"skills\": [\"Python\", \"Django\", \"Machine Learning\", \"Data Analysis\"],\n    \"progress\": 0.0\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "register", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Register User - Mentor",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"bob.mentor@example.com\",\n    \"password\": \"MentorPass123!\",\n    \"role\": \"Mentor\",\n    \"skills\": [\"React\", \"Node.js\", \"DevOps\", \"AWS\", \"Kubernetes\"],\n    \"progress\": 0.0\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "register", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Login User",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.environment.set('access_token', response.access);",
+                                    "    pm.environment.set('refresh_token', response.refresh);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"alice.learner@example.com\",\n    \"password\": \"SecurePass123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/token/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "token", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User Profile",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/profile/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "profile", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "AI Career Coach",
+            "item": [
+                {
+                    "name": "Career Advice - Python Development",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"query\": \"I'm a beginner in Python and want to become a machine learning engineer. What skills should I focus on and what career path should I follow?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ai/career-coach/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "career-coach", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Career Advice - Web Development",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"query\": \"I have 2 years experience in React. How can I transition to full-stack development and what technologies should I learn?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ai/career-coach/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "career-coach", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Career Advice - DevOps Transition",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"query\": \"I'm a software developer looking to transition into DevOps. What are the essential skills and certifications I need to get started?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ai/career-coach/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "career-coach", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Recommendation Engine",
+            "item": [
+                {
+                    "name": "Get Personalized Recommendations",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/recommendations/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "recommendations", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Natural Language Search",
+            "item": [
+                {
+                    "name": "Search - Python Programming",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=How to learn Python programming for beginners",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "How to learn Python programming for beginners"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search - Machine Learning",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=machine learning algorithms and best practices",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "machine learning algorithms and best practices"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search - Web Development",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=React hooks and state management best practices",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "React hooks and state management best practices"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search - DevOps",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/search/?query=Docker containers and Kubernetes deployment strategies",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "search", ""],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "Docker containers and Kubernetes deployment strategies"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Predictive Analytics",
+            "item": [
+                {
+                    "name": "Get User Engagement Forecast",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ai/predictive/",
+                            "host": ["{{base_url}}"],
+                            "path": ["ai", "predictive", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Forum Management",
+            "item": [
+                {
+                    "name": "Create Forum Post - Python Help",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Best practices for Python error handling and debugging\",\n    \"content\": \"I'm working on a Python project and struggling with proper error handling. What are the best practices for exception handling in Python? Should I use try-except blocks everywhere or are there better patterns? Also, what debugging tools do you recommend for Python development? I've been using print statements but I know there must be better ways to debug complex applications.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Forum Post - Machine Learning",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Getting started with machine learning: choosing the right algorithms\",\n    \"content\": \"I'm new to machine learning and overwhelmed by the number of algorithms available. How do I choose between linear regression, decision trees, random forests, and neural networks? What factors should I consider when selecting an algorithm for a specific problem? Are there any rules of thumb or decision frameworks that can help guide algorithm selection for beginners?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Forum Post - React Development",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"React hooks vs class components: when to use what?\",\n    \"content\": \"I've been learning React and I'm confused about when to use hooks versus class components. I understand that hooks are the modern approach, but are there still use cases where class components are better? What are the performance implications of using hooks? Should I refactor all my existing class components to use hooks, or is it okay to mix both approaches in the same project?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Forum Post - DevOps",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Docker vs Kubernetes: understanding container orchestration\",\n    \"content\": \"I'm transitioning from traditional deployment methods to containerization. I understand Docker for creating containers, but I'm struggling to understand when and why I need Kubernetes. What problems does Kubernetes solve that Docker alone cannot? Is it overkill for small applications? What's the learning curve like, and are there simpler alternatives to Kubernetes for container orchestration?\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Forum Posts",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/forum-posts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "forum-posts", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Job Listings",
+            "item": [
+                {
+                    "name": "Create Job Listing - Python Developer",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Senior Python Developer - Machine Learning\",\n    \"description\": \"We are seeking a Senior Python Developer with expertise in machine learning to join our AI team. Requirements: 5+ years Python experience, experience with TensorFlow/PyTorch, strong background in data science, knowledge of MLOps practices. Responsibilities include developing ML models, optimizing algorithms, and deploying models to production. Competitive salary and benefits package.\",\n    \"company\": \"TechAI Solutions\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/job-listings/",
+                            "host": ["{{base_url}}"],
+                            "path": ["auth", "api", "job-listings", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Job Listing - React Developer",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{access_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Frontend React Developer\",\n    \"description\": \"Join our frontend team as a React Developer! We're looking for someone with 3+ years of React experience, proficiency in modern JavaScript (ES6+), experience with state management (Redux/Context API), and knowledge of testing frameworks (Jest, React Testing Library). You'll work on building responsive user interfaces and collaborating with design and backend teams.\",\n    \"company\": \"WebFlow Innovations\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/api/job-listings/",
+                            "host": ["{{
