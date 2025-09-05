@@ -49,8 +49,10 @@ class VerifyEmailView(APIView):
             uid = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(pk=uid)
             if default_token_generator.check_token(user, token):
-                user.is_verified = True
-                user.save()
+                if not user.is_verified:  # Prevent re-verification
+                    user.is_verified = True
+                    user.save()
+                    logger.info(f"Email verified for user {user.email}")
                 return Response({'message': 'Email verified successfully'}, status=status.HTTP_200_OK)
             return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):

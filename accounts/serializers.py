@@ -3,10 +3,14 @@ from rest_framework import serializers
 from .models import AnalyticsEvent, ForumPost, JobListing, LearningResource, User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
+from celery import shared_task
+import logging
 import os
+
+logger = logging.getLogger(__name__)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,10 +46,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.progress = progress
             user.save()
             # Send verification email
-            self.send_verification_email(user)
+            # Generate UID and token
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
             verification_link = f"http://localhost:8000/auth/verify/{uid}/{token}"
-            send_verification_email.delay(user.email, verification_link)  # Async call
-
+            # Trigger async email task
+            send_verification_email.delay(user.email, verification_link)
+            logger.info(f"Registration successful for user {user.email}, verification email queued")
             return user
         except KeyError as e:
             raise serializers.ValidationError(f"Missing required field: {e}")
@@ -69,7 +76,21 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
         except Exception as e:
             # Handle the exception, e.g., log the error or return an error message
-            print(f"Error sending email: {e}")
+            logger.error(f"Error sending email: {str(e)}")
+
+# Celery task for async email
+@shared_task
+def send_verification_email(email, verification_link):
+    try:
+        send_mail(
+            'Verify Your Account',
+            f'Click the link to verify your account: {verification_link}',
+            os.getenv('EMAIL_HOST_USER'),
+            [email],
+            fail_silently=False,
+        )
+    except Exception as e:
+        logger.error(f"Error sending email (task): {str(e)}")
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
