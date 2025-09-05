@@ -7,9 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import UntypedToken
 from django.utils import timezone
-from django.db.models import Count
+from django.db.models import Count, Sum
 from rest_framework_simplejwt.views import TokenObtainPairView
-from sympy import Sum
 from .models import ForumPost, JobListing, User
 from .serializers import ForumPostSerializer, JobListingSerializer, AnalyticsEventSerializer, UserSerializer, RegisterSerializer, CustomTokenObtainPairSerializer, LearningResourceSerializer, AnalyticsSummarySerializer
 from rest_framework.pagination import PageNumberPagination
@@ -129,32 +128,64 @@ class AnalyticsSummary(APIView):
     @method_decorator(cache_page(60 * 5))  # Cache for 5 minutes
     def get(self, request):
         try:
-            # Check cache first
+            # Check cache first with error handling
             cache_key = f"analytics_summary_{request.user.id}"
-            cached_data = cache.get(cache_key)
+            cached_data = None
+            try:
+                cached_data = cache.get(cache_key)
+            except Exception as cache_e:
+                logger.error(f"Cache connection failed: {str(cache_e)}")
             if cached_data is not None:
+                logger.info(f"Cache hit for user {request.user.id}")
                 return Response(cached_data)
 
             today = timezone.now().date()
-            # Optimize queries with aggregation
-            daily_logins = User.objects.filter(last_login__date=today).count()
-            total_resources_viewed = User.objects.aggregate(total=Sum('resources_viewed'))['total'] or 0
+            logger.info(f"Fetching analytics for date: {today}")
 
-            event_types = AnalyticsEvent.objects.values('event_type').annotate(count=Count('id'))
+            # Database queries with error handling
+            try:
+                daily_logins = User.objects.filter(last_login__date=today).count()
+                logger.info(f"Daily logins count: {daily_logins}")
+            except Exception as db_e:
+                logger.error(f"Database error for daily logins: {str(db_e)}")
+                daily_logins = 0
+
+            try:
+                total_resources_query = User.objects.aggregate(total_resources=Sum('resources_viewed'))
+                total_resources_viewed = total_resources_query['total_resources'] if total_resources_query['total_resources'] is not None else 0
+                logger.info(f"Total resources viewed: {total_resources_viewed}")
+            except Exception as db_e:
+                logger.error(f"Database error for resources viewed: {str(db_e)}")
+                total_resources_viewed = 0
+
+            try:
+                event_types = AnalyticsEvent.objects.values('event_type').annotate(count=Count('id'))
+                event_count = AnalyticsEvent.objects.count()
+                logger.info(f"Event count: {event_count}, Event types: {list(event_types)}")
+            except Exception as db_e:
+                logger.error(f"Database error for events: {str(db_e)}")
+                event_types = []
+                event_count = 0
+
             data = {
                 'daily_active_users': daily_logins,
                 'total_resources_viewed': total_resources_viewed,
-                'event_count': AnalyticsEvent.objects.count(),
+                'event_count': event_count,
                 'event_types': list(event_types),
             }
             serializer = AnalyticsSummarySerializer(data)
             response_data = serializer.data
 
-            # Cache the result per user
-            cache.set(cache_key, response_data, timeout=60 * 5)
+            # Cache the result per user, handle failure
+            try:
+                cache.set(cache_key, response_data, timeout=60 * 5)
+                logger.info(f"Cache set for user {request.user.id}")
+            except Exception as cache_e:
+                logger.error(f"Cache error: {str(cache_e)}")
+
             return Response(response_data)
         except Exception as e:
-            logger.error(f"Analytics summary error: {str(e)}")
+            logger.error(f"Analytics summary error: {str(e)}", exc_info=True)
             return Response({"error": "Failed to retrieve analytics"}, status=500)
     
 class LoginView(TokenObtainPairView):
