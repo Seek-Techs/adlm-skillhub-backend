@@ -29,7 +29,7 @@ To develop a scalable, intelligent backend platform that empowers users with per
 
 ### Prerequisites
 - Install Python 3.13 and pip.
-- Install PostgreSQL 15 and create a database named `adlm_skillhub`, or install MongoDB for a local alternative (see below).
+- Install PostgreSQL 17 and create a database named `adlm_skillhub`, or install MongoDB for a local alternative (see below).
 - Ensure `git` is installed for cloning the repository.
 
 ### Setup

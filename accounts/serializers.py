@@ -7,6 +7,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from celery import shared_task
+from .tasks import send_verification_email
 import logging
 import os
 
@@ -45,14 +46,17 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.skills = skills
             user.progress = progress
             user.save()
-            # Send verification email
-            # Generate UID and token
+            # Send verification email async
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
             verification_link = f"http://localhost:8000/auth/verify/{uid}/{token}"
-            # Trigger async email task
-            send_verification_email.delay(user.email, verification_link)
-            logger.info(f"Registration successful for user {user.email}, verification email queued")
+            try:
+                send_verification_email.delay(user.email, verification_link)
+                logger.info(f"Registration successful for user {user.email}, verification email queued")
+            except OperationalError as e:
+                # Fallback: send email synchronously or log a warning
+                logger.error(f"Celery broker unavailable: {e}. Sending email synchronously.")
+                self.send_verification_email(user)
             return user
         except KeyError as e:
             raise serializers.ValidationError(f"Missing required field: {e}")
