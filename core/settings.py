@@ -13,9 +13,13 @@ if not SECRET_KEY:
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 # Using .lower() to make it case-insensitive
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
-if not ALLOWED_HOSTS:
-    raise ValueError("ALLOWED_HOSTS is not set in the environment variables")
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
+
+if DEBUG and not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+if not DEBUG and (not ALLOWED_HOSTS or '*' in ALLOWED_HOSTS):
+    raise ValueError("ALLOWED_HOSTS must be explicitly configured in production and cannot include '*'")
 
 
 INSTALLED_APPS = [
@@ -60,7 +64,11 @@ SIMPLE_JWT = {
     'SIGNING_KEY': os.getenv('JWT_SECRET_KEY', os.getenv('SECRET_KEY')),  # Fallback to SECRET_KEY
 }
 
-CORS_ALLOW_ALL_ORIGINS = True  # Adjust for production
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if origin.strip()]
+
+if not DEBUG and not CORS_ALLOWED_ORIGINS:
+    raise ValueError("CORS_ALLOWED_ORIGINS must be set in production when CORS_ALLOW_ALL_ORIGINS is False")
 
 DATABASES = {
     'default': {
