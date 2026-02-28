@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.utils import timezone
 from django.db.models import Count, Sum
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -82,17 +83,32 @@ class ProfileView(APIView):
 class RefreshTokenView(APIView):
     def post(self, request):
         refresh_token = request.data.get('refresh_token')
+        if not refresh_token:
+            return Response({'error': 'refresh_token is required'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             decoded = UntypedToken(refresh_token)
-            user_id = decoded['user_id']
+        except (InvalidToken, TokenError):
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_id = decoded.get('user_id')
+        if not user_id:
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
             user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
             # Store in session for now
             request.session['refresh_token'] = refresh_token
             from rest_framework_simplejwt.tokens import AccessToken
             access_token = AccessToken.for_user(user)
             return Response({'access_token': str(access_token)})
-        except:
-            return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            logger.exception('Unexpected refresh token error')
+            return Response({'error': 'Token refresh failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Phase 2: Analytics and Forum
 

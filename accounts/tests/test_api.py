@@ -43,6 +43,31 @@ class AuthApiTest(APITestCase):
         self.assertIsNotNone(user.last_login_time)
 
 
+    def test_refresh_token_api(self):
+        user = User.objects.create_user(email="refresh@ex.com", password="tokenpass", role="Learner", is_verified=True)
+        from rest_framework_simplejwt.tokens import RefreshToken
+
+        refresh_token = str(RefreshToken.for_user(user))
+        url = '/auth/refresh/'
+        response = self.client.post(url, {'refresh_token': refresh_token}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("access_token", response.data)
+
+    def test_refresh_token_api_rejects_invalid_token(self):
+        url = '/auth/refresh/'
+        response = self.client.post(url, {'refresh_token': 'not-a-token'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "Invalid refresh token")
+
+    def test_refresh_token_api_requires_token(self):
+        url = '/auth/refresh/'
+        response = self.client.post(url, {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "refresh_token is required")
+
 class ForumPostApiTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(email="forum@ex.com", password="pass", role="Learner")
