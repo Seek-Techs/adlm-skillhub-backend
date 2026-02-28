@@ -107,12 +107,15 @@ To develop a scalable, intelligent backend platform that empowers users with per
 - `/ai/predictive/`: Get engagement forecasts.
 
 ### Running Tests
-- Individual app tests (working):
+- Run the full suite:
+  ```bash
+  python manage.py test
+  ```
+- You can still run app-scoped suites when iterating:
   ```bash
   python manage.py test accounts.tests
   python manage.py test ai.tests
   ```
-- Note: Global `python manage.py test` is currently broken due to a test discovery issue (to be fixed in Phase 4).
 
 ## Documentation
 - **API Specification**: Available at `http://127.0.0.1:8000/openapi.json` (to be saved as `docs/api/openapi.json` in Phase 4).
@@ -128,7 +131,7 @@ To develop a scalable, intelligent backend platform that empowers users with per
 5. Submit a pull request.
 
 ## Known Issues
-- Global test command (`python manage.py test`) fails due to `accounts/tests` discovery. Use individual app tests for now.
+- Keep tests grouped under app-level `tests/` packages to avoid discovery/module name collisions.
 - MongoDB setup is optional and local; main branch uses PostgreSQL.
 
 ## Future Plans (Phase 4)

@@ -130,8 +130,6 @@ ROOT_URLCONF = 'core.urls'
 
 
 
-TEST_DISCOVER_TOP_LEVEL = True
-
 # Test settings
 # TESTS_DIR = [
 #     os.path.join(BASE_DIR, 'accounts/tests'),
