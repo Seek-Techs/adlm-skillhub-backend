@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,15 +7,24 @@ from sentence_transformers import SentenceTransformer, util
 from .models import Recommendation, AnalyticsEvent
 from accounts.models import LearningResource, ForumPost
 import faiss
-from rest_framework import permissions
 from sklearn.linear_model import LinearRegression
 import numpy as np
 from django.utils import timezone
-from django.db.models import QuerySet
+from functools import lru_cache
 
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1)
+def get_text_generator():
+    return pipeline("text-generation", model="gpt2")
+
+
+@lru_cache(maxsize=1)
+def get_sentence_model():
+    return SentenceTransformer('all-MiniLM-L6-v2')
 
 class AICareerCoach(APIView):
     permission_classes = [IsAuthenticated]
@@ -31,7 +37,7 @@ class AICareerCoach(APIView):
         try:
             # Use a prompt to guide the model
             prompt = f"Provide a structured response to the following query about a career path: {query}"
-            generator = pipeline("text-generation", model="gpt2")
+            generator = get_text_generator()
             response = generator(
                 prompt,
                 max_length=200,  # Increase to allow more text
@@ -50,14 +56,20 @@ class RecommendationEngine(APIView):
 
     def get(self, request):
         user = request.user
-        resources = LearningResource.objects.all()
-        model = SentenceTransformer('all-MiniLM-L6-v2')
+        resources = list(LearningResource.objects.all())
+        if not resources:
+            return Response([])
+
+        model = get_sentence_model()
         user_skills = " ".join(user.skills) if user.skills else ""
-        user_embedding = model.encode(user_skills)
+        user_embedding = model.encode([user_skills], convert_to_tensor=True)
+        resource_contents = [resource.content for resource in resources]
+        resource_embeddings = model.encode(resource_contents, convert_to_tensor=True)
+        similarity_scores = util.cos_sim(user_embedding, resource_embeddings)[0]
+
         scores = []
-        for resource in resources:
-            resource_embedding = model.encode(resource.content)
-            score = util.cos_sim(user_embedding, resource_embedding)[0][0]
+        for resource, score_tensor in zip(resources, similarity_scores):
+            score = float(score_tensor)
             Recommendation.objects.update_or_create(user=user, resource=resource, defaults={'score': score})
             scores.append({"resource": resource.title, "score": score})
         return Response(scores)
@@ -67,10 +79,16 @@ class RecommendationEngine(APIView):
 class NaturalLanguageSearch(APIView):
     permission_classes = [AllowAny]
 
-    _model = SentenceTransformer('all-MiniLM-L6-v2')
+    _model = None
     _index = None
     _post_embeddings = None
     _posts = None
+
+    @classmethod
+    def get_model(cls):
+        if cls._model is None:
+            cls._model = get_sentence_model()
+        return cls._model
 
     @classmethod
     def initialize_index(cls):
@@ -82,7 +100,7 @@ class NaturalLanguageSearch(APIView):
                 if not post_contents:
                     logger.warning("No posts available for indexing")
                     return
-                cls._post_embeddings = cls._model.encode(post_contents)
+                cls._post_embeddings = cls.get_model().encode(post_contents)
                 logger.info(f"Generated embeddings for {len(post_contents)} posts")
                 cls._index = faiss.IndexFlatL2(cls._post_embeddings.shape[1])
                 cls._index.add(cls._post_embeddings)
@@ -102,7 +120,7 @@ class NaturalLanguageSearch(APIView):
             if self._index is None or not self._posts:
                 return Response({"error": "No posts available or index failed to initialize"}, status=404)
 
-            query_embedding = self._model.encode([query])
+            query_embedding = self.get_model().encode([query])
             logger.info(f"Encoded query: {query}")
             distances, indices = self._index.search(query_embedding, k=min(5, len(self._posts)))
             result_posts = [self._posts[i] for i in indices[0] if i < len(self._posts)]

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DEBUG: "true"
+      SECRET_KEY: "ci-secret-key"
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+      EMAIL_HOST_USER: "ci@example.com"
+      EMAIL_HOST_PASSWORD: "ci-password"
+      DATABASE_ENGINE: "django.db.backends.sqlite3"
+      DATABASE_NAME: "db.sqlite3"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install CI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-ci.txt
+
+      - name: Static compile check
+        run: |
+          python -m py_compile core/settings.py accounts/views.py accounts/serializers.py ai/views.py accounts/tests/test_api.py ai/tests/tests_api.py
+
+      - name: Run Django tests
+        run: |
+          python manage.py test

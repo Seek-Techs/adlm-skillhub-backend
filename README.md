@@ -116,6 +116,10 @@ To develop a scalable, intelligent backend platform that empowers users with per
   python manage.py test accounts.tests
   python manage.py test ai.tests
   ```
+- CI enforcement (GitHub Actions):
+  - installs `requirements-ci.txt`
+  - runs syntax compile checks
+  - runs `python manage.py test` on SQLite
 
 ## Documentation
 - **API Specification**: Available at `http://127.0.0.1:8000/openapi.json` (to be saved as `docs/api/openapi.json` in Phase 4).
