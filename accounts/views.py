@@ -146,7 +146,7 @@ class AnalyticsSummary(APIView):
 
             # Database queries with error handling
             try:
-                daily_logins = User.objects.filter(last_login__date=today).count()
+                daily_logins = User.objects.filter(last_login_time__date=today).count()
                 logger.info(f"Daily logins count: {daily_logins}")
             except Exception as db_e:
                 logger.error(f"Database error for daily logins: {str(db_e)}")
@@ -191,6 +191,8 @@ class AnalyticsSummary(APIView):
             return Response({"error": "Failed to retrieve analytics"}, status=500)
     
 class LoginView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         try:
