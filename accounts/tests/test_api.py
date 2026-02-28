@@ -1,8 +1,7 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
-from rest_framework.test import force_authenticate
+from django.utils import timezone
 
 from accounts.models import ForumPost, JobListing, User
 
@@ -15,12 +14,34 @@ class AuthApiTest(APITestCase):
         self.assertIn("message", response.data)
 
     def test_token_api(self):
-        User.objects.create_user(email="token@ex.com", password="tokenpass", role="Learner")
+        User.objects.create_user(email="token@ex.com", password="tokenpass", role="Learner", is_verified=True)
         url = reverse('token_obtain_pair')
         data = {"email": "token@ex.com", "password": "tokenpass"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("access", response.data)
+
+
+    def test_token_api_rejects_unverified_user(self):
+        User.objects.create_user(email="unverified@ex.com", password="tokenpass", role="Learner", is_verified=False)
+        url = reverse('token_obtain_pair')
+        data = {"email": "unverified@ex.com", "password": "tokenpass"}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
+
+    def test_token_api_updates_login_stats(self):
+        user = User.objects.create_user(email="stats@ex.com", password="tokenpass", role="Learner", is_verified=True)
+        url = reverse('token_obtain_pair')
+        data = {"email": "stats@ex.com", "password": "tokenpass"}
+
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        user.refresh_from_db()
+        self.assertEqual(user.login_count, 1)
+        self.assertIsNotNone(user.last_login_time)
+
 
 class ForumPostApiTest(APITestCase):
     def setUp(self):
@@ -61,10 +82,15 @@ class ForumPostApiTest(APITestCase):
         self.assertEqual(response.data["title"], "Old Job")
 
     def test_analytics_summary(self):
+        active_user = User.objects.create_user(email="active@ex.com", password="pass", role="Learner")
+        active_user.last_login_time = timezone.now()
+        active_user.save(update_fields=["last_login_time"])
+
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.url_analytics)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("daily_active_users", response.data)
+        self.assertGreaterEqual(response.data["daily_active_users"], 1)
 
     def test_unauthorized_forum_post_create(self):
         client = APIClient()  # Fresh unauthenticated client

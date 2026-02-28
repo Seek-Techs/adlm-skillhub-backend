@@ -6,8 +6,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
-from celery import shared_task
 from .tasks import send_verification_email
+from kombu.exceptions import OperationalError
 import logging
 import os
 
@@ -82,19 +82,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             # Handle the exception, e.g., log the error or return an error message
             logger.error(f"Error sending email: {str(e)}")
 
-# Celery task for async email
-@shared_task
-def send_verification_email(email, verification_link):
-    try:
-        send_mail(
-            'Verify Your Account',
-            f'Click the link to verify your account: {verification_link}',
-            os.getenv('EMAIL_HOST_USER'),
-            [email],
-            fail_silently=False,
-        )
-    except Exception as e:
-        logger.error(f"Error sending email (task): {str(e)}")
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
