@@ -124,6 +124,26 @@ To develop a scalable, intelligent backend platform that empowers users with per
   - executes smoke checks (`manage.py check` + URL resolution)
   - runs `python manage.py test`
 
+## Environment Configuration
+
+Use `.env.example` as the baseline for local, CI, and production configuration.
+
+### Required in production
+- `SECRET_KEY`
+- `ALLOWED_HOSTS` (must be explicit and cannot contain `*`)
+- `CORS_ALLOWED_ORIGINS`
+- `EMAIL_HOST_USER`
+- `EMAIL_HOST_PASSWORD`
+
+### Optional in development
+- `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` (console backend can be used for local testing)
+- Social auth client IDs/secrets
+- Celery/Redis overrides
+
+Observability notes:
+- Every response includes `X-Request-ID`.
+- Request completion logs include request id, method, path, status, and duration.
+
 ## Documentation
 - **API Specification**: Available at `http://127.0.0.1:8000/openapi.json` (to be saved as `docs/api/openapi.json` in Phase 4).
 - **Data Models**: To be documented in `docs/models.md`.

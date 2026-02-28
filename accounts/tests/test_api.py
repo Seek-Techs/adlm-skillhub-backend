@@ -68,6 +68,20 @@ class AuthApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "refresh_token is required")
 
+    def test_register_api_invalid_payload_returns_error_envelope(self):
+        url = reverse('register')
+        response = self.client.post(url, {'role': 'Learner'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
+
+    def test_verify_email_invalid_link_returns_error_envelope(self):
+        url = '/auth/verify/invalid/invalid-token/'
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
+
 class ForumPostApiTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(email="forum@ex.com", password="pass", role="Learner")
@@ -122,3 +136,11 @@ class ForumPostApiTest(APITestCase):
         data = {"title": "Unauthorized Post", "content": "Content"}
         response = client.post(self.url_forum_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_request_id_header_is_returned(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url_forum_list)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('X-Request-ID', response)
+

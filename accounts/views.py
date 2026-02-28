@@ -41,7 +41,7 @@ class RegisterView(APIView):
                 logger.error(f"Request data: {request.data}\n{traceback.format_exc()}")
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         logger.warning(f"Validation errors: {serializer.errors}")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
@@ -56,9 +56,9 @@ class VerifyEmailView(APIView):
                     user.save()
                     logger.info(f"Email verified for user {user.email}")
                 return Response({'message': 'Email verified successfully'}, status=status.HTTP_200_OK)
-            return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response({'message': 'Invalid verification link'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid verification link'}, status=status.HTTP_400_BAD_REQUEST)
 
 # class VerifyEmailView(APIView):
 #     def get(self, request, token):
@@ -70,7 +70,7 @@ class VerifyEmailView(APIView):
 #             user.save()
 #             return Response({'message': 'Email verified'})
 #         except:
-#             return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+#             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
