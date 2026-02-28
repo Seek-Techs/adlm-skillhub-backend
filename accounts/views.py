@@ -27,6 +27,19 @@ from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
+
+def api_success(message=None, data=None):
+    payload = {}
+    if message is not None:
+        payload['message'] = message
+    if data is not None:
+        payload['data'] = data
+    return payload
+
+
+def api_error(error):
+    return {'error': error}
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -35,13 +48,13 @@ class RegisterView(APIView):
             try:
                 user = serializer.save()
                 logger.info(f"User registered: {user.email}")
-                return Response({'message': 'User registered, check email'}, status=status.HTTP_201_CREATED)
+                return Response(api_success(message='User registered, check email'), status=status.HTTP_201_CREATED)
             except Exception as e:
                 logger.error(f"Registration error: {str(e)}")
                 logger.error(f"Request data: {request.data}\n{traceback.format_exc()}")
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(api_error(str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         logger.warning(f"Validation errors: {serializer.errors}")
-        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(api_error(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
     
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
@@ -55,10 +68,10 @@ class VerifyEmailView(APIView):
                     user.is_verified = True
                     user.save()
                     logger.info(f"Email verified for user {user.email}")
-                return Response({'message': 'Email verified successfully'}, status=status.HTTP_200_OK)
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(api_success(message='Email verified successfully'), status=status.HTTP_200_OK)
+            return Response(api_error('Invalid token'), status=status.HTTP_400_BAD_REQUEST)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response({'error': 'Invalid verification link'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(api_error('Invalid verification link'), status=status.HTTP_400_BAD_REQUEST)
 
 # class VerifyEmailView(APIView):
 #     def get(self, request, token):
@@ -70,7 +83,7 @@ class VerifyEmailView(APIView):
 #             user.save()
 #             return Response({'message': 'Email verified'})
 #         except:
-#             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+#             return Response(api_error('Invalid token'), status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -84,31 +97,31 @@ class RefreshTokenView(APIView):
     def post(self, request):
         refresh_token = request.data.get('refresh_token')
         if not refresh_token:
-            return Response({'error': 'refresh_token is required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(api_error('refresh_token is required'), status=status.HTTP_400_BAD_REQUEST)
 
         try:
             decoded = UntypedToken(refresh_token)
         except (InvalidToken, TokenError):
-            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(api_error('Invalid refresh token'), status=status.HTTP_400_BAD_REQUEST)
 
         user_id = decoded.get('user_id')
         if not user_id:
-            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(api_error('Invalid refresh token'), status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(api_error('Invalid refresh token'), status=status.HTTP_400_BAD_REQUEST)
 
         try:
             # Store in session for now
             request.session['refresh_token'] = refresh_token
             from rest_framework_simplejwt.tokens import AccessToken
             access_token = AccessToken.for_user(user)
-            return Response({'access_token': str(access_token)})
+            return Response(api_success(data={'access_token': str(access_token)}))
         except Exception:
             logger.exception('Unexpected refresh token error')
-            return Response({'error': 'Token refresh failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(api_error('Token refresh failed'), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Phase 2: Analytics and Forum
 
@@ -217,9 +230,9 @@ class LoginView(TokenObtainPairView):
             user = serializer.user
             if user:
                 user.update_login_stats()  # Update login stats for the authenticated user
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+            return Response(api_success(data=serializer.validated_data), status=status.HTTP_200_OK)
         except DRFValidationError as exc:
-            return Response({'error': exc.detail}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(api_error(exc.detail), status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             logger.exception("Unexpected login error")
-            return Response({'error': 'Login failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(api_error('Login failed'), status=status.HTTP_500_INTERNAL_SERVER_ERROR)

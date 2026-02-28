@@ -19,7 +19,8 @@ class AuthApiTest(APITestCase):
         data = {"email": "token@ex.com", "password": "tokenpass"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("access", response.data)
+        self.assertIn("data", response.data)
+        self.assertIn("access", response.data["data"])
 
 
     def test_token_api_rejects_unverified_user(self):
@@ -38,6 +39,7 @@ class AuthApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("data", response.data)
         user.refresh_from_db()
         self.assertEqual(user.login_count, 1)
         self.assertIsNotNone(user.last_login_time)
@@ -52,7 +54,8 @@ class AuthApiTest(APITestCase):
         response = self.client.post(url, {'refresh_token': refresh_token}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("access_token", response.data)
+        self.assertIn("data", response.data)
+        self.assertIn("access_token", response.data["data"])
 
     def test_refresh_token_api_rejects_invalid_token(self):
         url = '/auth/refresh/'

@@ -79,7 +79,7 @@ jobs:
       - name: Smoke test (framework boot + URL resolution)
         run: |
           python manage.py check
-          python manage.py shell -c "from django.urls import reverse; print(reverse('schema-json')); print(reverse('token_obtain_pair'))"
+          python manage.py smoke_check
 
       - name: Run Django tests
         run: |

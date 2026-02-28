@@ -1,3 +1,4 @@
+import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,8 +14,22 @@ from django.utils import timezone
 from functools import lru_cache
 
 import logging
+import time
 
 logger = logging.getLogger(__name__)
+
+
+def get_ai_latency_warn_ms():
+    return float(os.getenv('AI_LATENCY_WARN_MS', '1500'))
+
+
+def log_ai_latency(endpoint_name, start_time):
+    duration_ms = (time.perf_counter() - start_time) * 1000
+    if duration_ms > get_ai_latency_warn_ms():
+        logger.warning('%s latency warning: %.2fms exceeds threshold %.2fms', endpoint_name, duration_ms, get_ai_latency_warn_ms())
+    else:
+        logger.info('%s latency: %.2fms', endpoint_name, duration_ms)
+
 
 
 @lru_cache(maxsize=1)
@@ -30,49 +45,58 @@ class AICareerCoach(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        start_time = time.perf_counter()
         query = request.data.get('query')
         if not query:
             return Response({"error": "Query is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Use a prompt to guide the model
             prompt = f"Provide a structured response to the following query about a career path: {query}"
             generator = get_text_generator()
             response = generator(
                 prompt,
-                max_length=200,  # Increase to allow more text
+                max_length=200,
                 num_return_sequences=1,
-                truncation=True,  # Explicitly enable truncation
-                pad_token_id=generator.tokenizer.eos_token_id  # Ensure proper padding
+                truncation=True,
+                pad_token_id=generator.tokenizer.eos_token_id,
             )[0]['generated_text']
             return Response({"advice": response})
         except Exception as e:
             logger.error(f"Error generating advice: {str(e)}")
             return Response({"error": "Failed to generate advice"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        finally:
+            log_ai_latency("career_coach", start_time)
 
 
 class RecommendationEngine(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        resources = list(LearningResource.objects.all())
-        if not resources:
-            return Response([])
+        start_time = time.perf_counter()
+        try:
+            user = request.user
+            resources = list(LearningResource.objects.all())
+            if not resources:
+                return Response([])
 
-        model = get_sentence_model()
-        user_skills = " ".join(user.skills) if user.skills else ""
-        user_embedding = model.encode([user_skills], convert_to_tensor=True)
-        resource_contents = [resource.content for resource in resources]
-        resource_embeddings = model.encode(resource_contents, convert_to_tensor=True)
-        similarity_scores = util.cos_sim(user_embedding, resource_embeddings)[0]
+            model = get_sentence_model()
+            user_skills = " ".join(user.skills) if user.skills else ""
+            user_embedding = model.encode([user_skills], convert_to_tensor=True)
+            resource_contents = [resource.content for resource in resources]
+            resource_embeddings = model.encode(resource_contents, convert_to_tensor=True)
+            similarity_scores = util.cos_sim(user_embedding, resource_embeddings)[0]
 
-        scores = []
-        for resource, score_tensor in zip(resources, similarity_scores):
-            score = float(score_tensor)
-            Recommendation.objects.update_or_create(user=user, resource=resource, defaults={'score': score})
-            scores.append({"resource": resource.title, "score": score})
-        return Response(scores)
+            scores = []
+            for resource, score_tensor in zip(resources, similarity_scores):
+                score = float(score_tensor)
+                Recommendation.objects.update_or_create(user=user, resource=resource, defaults={'score': score})
+                scores.append({"resource": resource.title, "score": score})
+            return Response(scores)
+        except Exception as e:
+            logger.error(f"Recommendation error: {str(e)}")
+            return Response({"error": "Failed to generate recommendations"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        finally:
+            log_ai_latency("recommendations", start_time)
    
 # from sentence_transformers import SentenceTransformer
 
@@ -110,6 +134,7 @@ class NaturalLanguageSearch(APIView):
                 cls._index = None
 
     def get(self, request):
+        start_time = time.perf_counter()
         query = request.query_params.get('query')
         if not query:
             return Response({"error": "Query is required"}, status=400)
@@ -137,6 +162,8 @@ class NaturalLanguageSearch(APIView):
         except Exception as e:
             logger.error(f"Search error: {str(e)}")
             return Response({"error": "Search failed"}, status=500)
+        finally:
+            log_ai_latency("search", start_time)
 
 class PredictiveAnalytics(APIView):
     permission_classes = [IsAuthenticated]

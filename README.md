@@ -121,7 +121,7 @@ To develop a scalable, intelligent backend platform that empowers users with per
   - installs `requirements-ci.txt`
   - runs syntax compile checks
   - applies migrations
-  - executes smoke checks (`manage.py check` + URL resolution)
+  - executes smoke checks (`manage.py check` + `manage.py smoke_check`)
   - runs `python manage.py test`
 
 ## Environment Configuration
@@ -139,10 +139,17 @@ Use `.env.example` as the baseline for local, CI, and production configuration.
 - `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` (console backend can be used for local testing)
 - Social auth client IDs/secrets
 - Celery/Redis overrides
+- `AI_LATENCY_WARN_MS` (optional warning threshold in ms for AI endpoint latency logs)
 
 Observability notes:
 - Every response includes `X-Request-ID`.
 - Request completion logs include request id, method, path, status, and duration.
+
+### Deployment Smoke Check
+Run this after migrations in a deploy pipeline to validate framework/URL wiring quickly:
+```bash
+python manage.py smoke_check
+```
 
 ## Documentation
 - **API Specification**: Available at `http://127.0.0.1:8000/openapi.json` (to be saved as `docs/api/openapi.json` in Phase 4).
