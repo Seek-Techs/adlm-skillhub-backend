@@ -1,4 +1,3 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
@@ -21,7 +20,71 @@ class AuthApiTest(APITestCase):
         data = {"email": "token@ex.com", "password": "tokenpass"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("access", response.data)
+        self.assertIn("data", response.data)
+        self.assertIn("access", response.data["data"])
+
+
+    def test_token_api_rejects_unverified_user(self):
+        User.objects.create_user(email="unverified@ex.com", password="tokenpass", role="Learner", is_verified=False)
+        url = reverse('token_obtain_pair')
+        data = {"email": "unverified@ex.com", "password": "tokenpass"}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
+
+    def test_token_api_updates_login_stats(self):
+        user = User.objects.create_user(email="stats@ex.com", password="tokenpass", role="Learner", is_verified=True)
+        url = reverse('token_obtain_pair')
+        data = {"email": "stats@ex.com", "password": "tokenpass"}
+
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("data", response.data)
+        user.refresh_from_db()
+        self.assertEqual(user.login_count, 1)
+        self.assertIsNotNone(user.last_login_time)
+
+
+    def test_refresh_token_api(self):
+        user = User.objects.create_user(email="refresh@ex.com", password="tokenpass", role="Learner", is_verified=True)
+        from rest_framework_simplejwt.tokens import RefreshToken
+
+        refresh_token = str(RefreshToken.for_user(user))
+        url = '/auth/refresh/'
+        response = self.client.post(url, {'refresh_token': refresh_token}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("data", response.data)
+        self.assertIn("access_token", response.data["data"])
+
+    def test_refresh_token_api_rejects_invalid_token(self):
+        url = '/auth/refresh/'
+        response = self.client.post(url, {'refresh_token': 'not-a-token'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "Invalid refresh token")
+
+    def test_refresh_token_api_requires_token(self):
+        url = '/auth/refresh/'
+        response = self.client.post(url, {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"], "refresh_token is required")
+
+    def test_register_api_invalid_payload_returns_error_envelope(self):
+        url = reverse('register')
+        response = self.client.post(url, {'role': 'Learner'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
+
+    def test_verify_email_invalid_link_returns_error_envelope(self):
+        url = '/auth/verify/invalid/invalid-token/'
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
 
 
     def test_token_api_rejects_unverified_user(self):
@@ -86,3 +149,11 @@ class ForumPostApiTest(APITestCase):
         data = {"title": "Unauthorized Post", "content": "Content"}
         response = client.post(self.url_forum_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_request_id_header_is_returned(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url_forum_list)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('X-Request-ID', response)
+

@@ -1,13 +1,35 @@
-from datetime import timezone
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from accounts.models import User, ForumPost
 from ai.models import AnalyticsEvent
 from django.utils import timezone
+from unittest.mock import patch
+import numpy as np
+
+
+
+
+class FakeSentenceModel:
+    def encode(self, texts):
+        if isinstance(texts, str):
+            texts = [texts]
+        # deterministic tiny embeddings for tests
+        return np.array([[float(len(text))] for text in texts], dtype='float32')
 
 
 class NaturalLanguageSearchTest(APITestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.sentence_model_patcher = patch('ai.views.get_sentence_model', return_value=FakeSentenceModel())
+        cls.sentence_model_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.sentence_model_patcher.stop()
+        super().tearDownClass()
+
     def setUp(self):
         self.user = User.objects.create_user(email="search@ex.com", password="pass", role="Learner")
         self.post1 = ForumPost.objects.create(title="Test Post 1", content="This is a test", author=self.user)
