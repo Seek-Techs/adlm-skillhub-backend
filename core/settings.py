@@ -71,6 +71,9 @@ CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ALLOWED_ORI
 if not DEBUG and not CORS_ALLOWED_ORIGINS:
     raise ValueError("CORS_ALLOWED_ORIGINS must be set in production when CORS_ALLOW_ALL_ORIGINS is False")
 
+if not DEBUG and not CORS_ALLOWED_ORIGINS:
+    raise ValueError("CORS_ALLOWED_ORIGINS must be set in production when CORS_ALLOW_ALL_ORIGINS is False")
+
 DATABASE_ENGINE = os.getenv('DATABASE_ENGINE', 'django.db.backends.postgresql')
 
 if DATABASE_ENGINE == 'django.db.backends.sqlite3':

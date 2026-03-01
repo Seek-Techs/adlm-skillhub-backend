@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
 from django.utils import timezone
+from rest_framework.test import force_authenticate
 
 from accounts.models import ForumPost, JobListing, User
 
@@ -84,6 +85,15 @@ class AuthApiTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("error", response.data)
+
+
+    def test_token_api_rejects_unverified_user(self):
+        User.objects.create_user(email="unverified@ex.com", password="tokenpass", role="Learner", is_verified=False)
+        url = reverse('token_obtain_pair')
+        data = {"email": "unverified@ex.com", "password": "tokenpass"}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class ForumPostApiTest(APITestCase):
     def setUp(self):
