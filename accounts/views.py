@@ -40,6 +40,16 @@ def api_success(message=None, data=None):
 def api_error(error):
     return {'error': error}
 
+
+class EnvelopeResponseMixin:
+    def finalize_response(self, request, response, *args, **kwargs):
+        response = super().finalize_response(request, response, *args, **kwargs)
+        if 200 <= response.status_code < 300 and response.data is not None:
+            if isinstance(response.data, dict) and ({'data', 'error', 'message'} & set(response.data.keys())):
+                return response
+            response.data = api_success(data=response.data)
+        return response
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -125,7 +135,7 @@ class RefreshTokenView(APIView):
 
 # Phase 2: Analytics and Forum
 
-class ForumPostListCreate(generics.ListCreateAPIView):
+class ForumPostListCreate(EnvelopeResponseMixin, generics.ListCreateAPIView):
     queryset = ForumPost.objects.all()
     serializer_class = ForumPostSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -138,18 +148,18 @@ class ForumPostListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-class ForumPostRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class ForumPostRetrieveUpdateDestroy(EnvelopeResponseMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = ForumPost.objects.all()
     serializer_class = ForumPostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class JobListingListCreate(generics.ListCreateAPIView):
+class JobListingListCreate(EnvelopeResponseMixin, generics.ListCreateAPIView):
     queryset = JobListing.objects.all()
     serializer_class = JobListingSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = PageNumberPagination
 
-class JobListingRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class JobListingRetrieveUpdateDestroy(EnvelopeResponseMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = JobListing.objects.all()
     serializer_class = JobListingSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -169,7 +179,7 @@ class AnalyticsSummary(APIView):
                 logger.error(f"Cache connection failed: {str(cache_e)}")
             if cached_data is not None:
                 logger.info(f"Cache hit for user {request.user.id}")
-                return Response(cached_data)
+                return Response(api_success(data=cached_data))
 
             today = timezone.now().date()
             logger.info(f"Fetching analytics for date: {today}")
@@ -215,7 +225,7 @@ class AnalyticsSummary(APIView):
             except Exception as cache_e:
                 logger.error(f"Cache error: {str(cache_e)}")
 
-            return Response(response_data)
+            return Response(api_success(data=response_data))
         except Exception as e:
             logger.error(f"Analytics summary error: {str(e)}", exc_info=True)
             return Response({"error": "Failed to retrieve analytics"}, status=500)

@@ -19,6 +19,10 @@ import time
 logger = logging.getLogger(__name__)
 
 
+def api_success(data):
+    return {"data": data}
+
+
 def get_ai_latency_warn_ms():
     return float(os.getenv('AI_LATENCY_WARN_MS', '1500'))
 
@@ -60,7 +64,7 @@ class AICareerCoach(APIView):
                 truncation=True,
                 pad_token_id=generator.tokenizer.eos_token_id,
             )[0]['generated_text']
-            return Response({"advice": response})
+            return Response(api_success({"advice": response}))
         except Exception as e:
             logger.error(f"Error generating advice: {str(e)}")
             return Response({"error": "Failed to generate advice"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -77,7 +81,7 @@ class RecommendationEngine(APIView):
             user = request.user
             resources = list(LearningResource.objects.all())
             if not resources:
-                return Response([])
+                return Response(api_success([]))
 
             model = get_sentence_model()
             user_skills = " ".join(user.skills) if user.skills else ""
@@ -91,7 +95,7 @@ class RecommendationEngine(APIView):
                 score = float(score_tensor)
                 Recommendation.objects.update_or_create(user=user, resource=resource, defaults={'score': score})
                 scores.append({"resource": resource.title, "score": score})
-            return Response(scores)
+            return Response(api_success(scores))
         except Exception as e:
             logger.error(f"Recommendation error: {str(e)}")
             return Response({"error": "Failed to generate recommendations"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -158,7 +162,7 @@ class NaturalLanguageSearch(APIView):
                 }
                 for j, post in enumerate(result_posts)
             ]
-            return Response(results)
+            return Response(api_success(results))
         except Exception as e:
             logger.error(f"Search error: {str(e)}")
             return Response({"error": "Search failed"}, status=500)
@@ -171,7 +175,7 @@ class PredictiveAnalytics(APIView):
     def get(self, request):
         events = AnalyticsEvent.objects.filter(event_type='login').order_by('timestamp')
         if not events:
-            return Response({"forecast": "No data"})
+            return Response(api_success({"forecast": "No data"}))
         timestamps = [event.timestamp.timestamp() for event in events]
         X = np.array(timestamps).reshape(-1, 1)
         y = np.arange(len(events))  # Sequential engagement
@@ -179,4 +183,4 @@ class PredictiveAnalytics(APIView):
         model.fit(X, y)
         future_timestamp = (timezone.now() + timezone.timedelta(days=1)).timestamp()
         forecast = model.predict([[future_timestamp]])
-        return Response({"forecasted_engagement": int(forecast[0])})
+        return Response(api_success({"forecasted_engagement": int(forecast[0])}))

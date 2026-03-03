@@ -97,8 +97,9 @@ class ForumPostApiTest(APITestCase):
         data = {"title": "New Post", "content": "New Content"}
         response = self.client.post(self.url_forum_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["title"], "New Post")
-        self.assertEqual(response.data["author"], self.user.id)
+        self.assertIn("data", response.data)
+        self.assertEqual(response.data["data"]["title"], "New Post")
+        self.assertEqual(response.data["data"]["author"], self.user.id)
 
     def test_get_forum_post(self):
         self.client.force_authenticate(user=self.user)
@@ -106,14 +107,16 @@ class ForumPostApiTest(APITestCase):
         url = reverse('forumpost-detail', kwargs={'pk': post.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["title"], "Existing Post")
+        self.assertIn("data", response.data)
+        self.assertEqual(response.data["data"]["title"], "Existing Post")
 
     def test_create_job_listing(self):
         self.client.force_authenticate(user=self.user)
         data = {"title": "New Job", "description": "Part-time", "company": "NewCo"}
         response = self.client.post(self.url_job_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["title"], "New Job")
+        self.assertIn("data", response.data)
+        self.assertEqual(response.data["data"]["title"], "New Job")
 
     def test_get_job_listing(self):
         self.client.force_authenticate(user=self.user)
@@ -121,7 +124,8 @@ class ForumPostApiTest(APITestCase):
         url = reverse('joblisting-detail', kwargs={'pk': job.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["title"], "Old Job")
+        self.assertIn("data", response.data)
+        self.assertEqual(response.data["data"]["title"], "Old Job")
 
     def test_analytics_summary(self):
         active_user = User.objects.create_user(email="active@ex.com", password="pass", role="Learner")
@@ -131,8 +135,9 @@ class ForumPostApiTest(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.url_analytics)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("daily_active_users", response.data)
-        self.assertGreaterEqual(response.data["daily_active_users"], 1)
+        self.assertIn("data", response.data)
+        self.assertIn("daily_active_users", response.data["data"])
+        self.assertGreaterEqual(response.data["data"]["daily_active_users"], 1)
 
     def test_unauthorized_forum_post_create(self):
         client = APIClient()  # Fresh unauthenticated client

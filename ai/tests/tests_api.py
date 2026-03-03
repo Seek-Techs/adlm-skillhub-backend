@@ -43,7 +43,8 @@ class NaturalLanguageSearchTest(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.url, {'query': 'test'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data) > 0)
+        self.assertIn("data", response.data)
+        self.assertTrue(len(response.data["data"]) > 0)
 
     def test_search_no_query(self):
         response = self.client.get(self.url)
@@ -66,7 +67,8 @@ class PredictiveAnalyticsTest(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("forecasted_engagement", response.data)
+        self.assertIn("data", response.data)
+        self.assertIn("forecasted_engagement", response.data["data"])
 
 class AILatencyThresholdTest(TestCase):
     def test_ai_latency_warn_threshold_default(self):
