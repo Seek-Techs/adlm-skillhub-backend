@@ -144,6 +144,15 @@ class ForumPostApiTest(APITestCase):
         data = {"title": "Unauthorized Post", "content": "Content"}
         response = client.post(self.url_forum_list, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertIn("error", response.data)
+
+
+    def test_forum_post_validation_error_is_enveloped(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(self.url_forum_list, {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("error", response.data)
 
     def test_request_id_header_is_returned(self):
         self.client.force_authenticate(user=self.user)

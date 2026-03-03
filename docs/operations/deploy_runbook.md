@@ -60,3 +60,9 @@ Initiate rollback if any condition holds for >= 10 minutes after deploy:
 ## Incident ownership
 - Release owner: Executes deployment and rollback decisions.
 - On-call engineer: Investigates logs (`request` logger, auth/AI logs) and verifies recovery.
+
+
+## Release completion criteria
+- CI matrix green (SQLite + PostgreSQL).
+- Migrations and smoke checks pass in deploy target environment.
+- Auth and non-auth API response contracts validated against `docs/api/response_contracts.md`.
