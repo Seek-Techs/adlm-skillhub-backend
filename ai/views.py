@@ -1,20 +1,26 @@
 import os
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from transformers import pipeline
-from sentence_transformers import SentenceTransformer, util
-from .models import Recommendation, AnalyticsEvent
-from accounts.models import LearningResource, ForumPost
-import faiss
-from sklearn.linear_model import LinearRegression
-import numpy as np
-from django.utils import timezone
-from functools import lru_cache
-
 import logging
 import time
+from functools import lru_cache
+
+import numpy as np
+from django.utils import timezone
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from sentence_transformers import SentenceTransformer, util
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics.pairwise import euclidean_distances
+from transformers import pipeline
+
+from accounts.models import LearningResource, ForumPost
+from .models import Recommendation, AnalyticsEvent
+
+try:
+    import faiss
+except ImportError:  # pragma: no cover - depends on OS/runtime
+    faiss = None
 
 logger = logging.getLogger(__name__)
 
@@ -112,6 +118,24 @@ class NaturalLanguageSearch(APIView):
     _post_embeddings = None
     _posts = None
 
+    @staticmethod
+    def build_index(embeddings):
+        if faiss is not None:
+            index = faiss.IndexFlatL2(embeddings.shape[1])
+            index.add(embeddings)
+            return index
+        logger.warning("FAISS unavailable; falling back to NumPy distance search")
+        return embeddings
+
+    @staticmethod
+    def search_index(index, query_embedding, result_count):
+        if faiss is not None:
+            return index.search(query_embedding, k=result_count)
+
+        distances = euclidean_distances(query_embedding, index)
+        sorted_indices = np.argsort(distances[0])[:result_count]
+        return distances[:, sorted_indices], np.array([sorted_indices])
+
     @classmethod
     def get_model(cls):
         if cls._model is None:
@@ -130,9 +154,8 @@ class NaturalLanguageSearch(APIView):
                     return
                 cls._post_embeddings = cls.get_model().encode(post_contents)
                 logger.info(f"Generated embeddings for {len(post_contents)} posts")
-                cls._index = faiss.IndexFlatL2(cls._post_embeddings.shape[1])
-                cls._index.add(cls._post_embeddings)
-                logger.info("FAISS index created successfully")
+                cls._index = cls.build_index(cls._post_embeddings)
+                logger.info("Search index created successfully")
             except Exception as e:
                 logger.error(f"Index initialization failed: {str(e)}")
                 cls._index = None
@@ -151,7 +174,7 @@ class NaturalLanguageSearch(APIView):
 
             query_embedding = self.get_model().encode([query])
             logger.info(f"Encoded query: {query}")
-            distances, indices = self._index.search(query_embedding, k=min(5, len(self._posts)))
+            distances, indices = self.search_index(self._index, query_embedding, min(5, len(self._posts)))
             result_posts = [self._posts[i] for i in indices[0] if i < len(self._posts)]
             results = [
                 {
