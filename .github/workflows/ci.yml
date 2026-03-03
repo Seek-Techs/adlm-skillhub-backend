@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - database: sqlite
+            database_engine: django.db.backends.sqlite3
+            database_name: db.sqlite3
+            database_user: ""
+            database_password: ""
+            database_host: ""
+            database_port: ""
+          - database: postgres
+            database_engine: django.db.backends.postgresql
+            database_name: adlm_skillhub_ci
+            database_user: postgres
+            database_password: postgres
+            database_host: 127.0.0.1
+            database_port: 5432
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: adlm_skillhub_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d adlm_skillhub_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DEBUG: "true"
+      SECRET_KEY: "ci-secret-key"
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+      EMAIL_HOST_USER: "ci@example.com"
+      EMAIL_HOST_PASSWORD: "ci-password"
+      DATABASE_ENGINE: ${{ matrix.database_engine }}
+      DATABASE_NAME: ${{ matrix.database_name }}
+      DATABASE_USER: ${{ matrix.database_user }}
+      DATABASE_PASSWORD: ${{ matrix.database_password }}
+      DATABASE_HOST: ${{ matrix.database_host }}
+      DATABASE_PORT: ${{ matrix.database_port }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install CI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-ci.txt
+
+      - name: Static compile check
+        run: |
+          python -m py_compile core/settings.py accounts/views.py accounts/serializers.py ai/views.py accounts/tests/test_api.py ai/tests/tests_api.py
+
+      - name: Run migrations
+        run: |
+          python manage.py migrate --noinput
+
+      - name: Smoke test (framework boot + URL resolution)
+        run: |
+          python manage.py check
+          python manage.py smoke_check
+
+      - name: Run Django tests
+        run: |
+          python manage.py test

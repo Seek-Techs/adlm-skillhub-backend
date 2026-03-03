@@ -1,0 +1,16 @@
+Django>=5,<6
+djangorestframework
+djangorestframework-simplejwt
+python-dotenv
+django-cors-headers
+drf-yasg
+social-auth-app-django
+argon2-cffi
+celery
+kombu
+django-redis
+numpy
+scikit-learn
+sentence-transformers
+transformers
+faiss-cpu
